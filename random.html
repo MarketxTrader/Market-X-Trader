@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lucky Draw Boxes - Loop Animation</title>
+  <style>
+    body {
+      font-family: "Khmer OS Siemreap", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .background {
+      position: relative;
+      background-image: url('./6379114.jpg');
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    .scroll-box {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 90vw;
+      scroll-behavior: smooth;
+    }
+
+    .reward-card {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      flex: 0 0 auto;
+      transform-style: preserve-3d;
+      transition: transform 0.8s;
+      cursor: pointer;
+    }
+
+    .reward-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .reward-card.zoom {
+      animation: zoomWinner 0.8s ease forwards;
+      z-index: 10;
+    }
+
+    @keyframes zoomWinner {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.5) rotateY(180deg);
+      }
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .card-front {
+      background: #ffd000;
+    }
+
+    .card-back {
+      background: #4caf50;
+      color: white;
+      transform: rotateY(180deg);
+      flex-direction: column;
+    }
+
+    .free .card-front {
+        background: #ffd000;
+      color: rgb(255, 255, 255);
+    }
+
+    .highlight {
+      outline: 4px solid orange;
+      outline-offset: 3px;
+    }
+
+    .result {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .buttons {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .draw-btn {
+      background-color: #007bff;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .claim-btn {
+      background-color: #001eff;
+      color: white;
+    }
+
+    .next-btn {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .modal-content {
+      background: radial-gradient(circle at center, #4caf50, #1b5e20);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 30px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.2), 0 0 10px #4caf50;
+      animation: zoomIn 0.6s ease forwards, glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px #4caf50;
+      }
+      to {
+        box-shadow: 0 0 20px #81c784, 0 0 30px #66bb6a;
+      }
+    }
+
+    .modal-content h3 {
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .modal-content .btn {
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 28px;
+        padding: 0 10px;
+      }
+
+      .button {
+        font-size: 18px;
+        min-width: 220px;
+        min-height: 50px;
+      }
+
+      .reload-btn,
+      .reload-btn1 {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 22px;
+      }
+
+      .button {
+        font-size: 16px;
+        min-width: 180px;
+        min-height: 45px;
+      }
+
+      .reload-btn,
+      .reload-btn1 {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body onload="showModalWithAlert()">
+  <div class="background">
+    <div class="overlay"></div>
+    <div class="content">
+      <h2>📦 ចាប់ប្រអប់រង្វាន់</h2>
+      <div class="scroll-box" id="boxContainer"></div>
+      <button class="btn draw-btn" onclick="draw()">🎰 ចាប់ឥឡូវនេះ</button>
+      <div class="result" id="resultText">ចុចប៊ូតុងដើម្បីចាប់</div>
+      <div class="buttons" id="actionButtons">
+        <button class="btn claim-btn" onclick="alert('សូមថតអេក្រង់!')">📸 ទទួលបាន</button>
+        <button class="btn next-btn" onclick="window.location.href='next.html'">➡️ បន្ត</button>
+      </div>
+      <audio id="flipSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_252d8d30e4.mp3"></audio>
+      <audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/02/audio_c74f4f7acb.mp3"></audio>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="winModal">
+    <div class="modal-content" id="modalContent">
+      <h3>🎉សូមអបអរសាទរ🎉</h3>
+      <p id="modalReward">កូដបញ្ចុះតម្លៃ៖ </p>
+      <button class="btn claim-btn" onclick="window.location.href='discont.html'">យល់ព្រម</button>
+    </div>
+  </div>
+
+  <script>
+    const rewards = [
+      { label: "10$", code: "168" },
+      { label: "5$", code: "143" },
+      { label: "Free", code: "Free", isFree: true },
+    ];
+
+    const boxContainer = document.getElementById('boxContainer');
+    const resultText = document.getElementById('resultText');
+    const actionButtons = document.getElementById('actionButtons');
+    const flipSound = document.getElementById('flipSound');
+    const winSound = document.getElementById('winSound');
+    const winModal = document.getElementById('winModal');
+    const modalReward = document.getElementById('modalReward');
+
+    rewards.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'reward-card' + (item.isFree ? ' free' : '');
+      card.dataset.code = item.code;
+      card.dataset.label = item.label;
+
+      card.innerHTML = `
+        <div class="card-face card-front">${item.label}</div>
+        <div class="card-face card-back">
+          <div>បញ្ចុះ ${item.label}</div>
+          <div>កូដ: ${item.code}</div>
+        </div>
+      `;
+      boxContainer.appendChild(card);
+    });
+
+    async function draw() {
+      resultText.innerText = "កំពុងចាប់...";
+      document.querySelector('.draw-btn').disabled = true;
+      actionButtons.style.display = "none";
+
+      const cards = document.querySelectorAll('.reward-card');
+      cards.forEach(c => c.classList.remove('flipped', 'highlight'));
+
+      const validRewards = rewards.map((r, i) => ({ ...r, index: i }))
+        .filter(r => !r.isFree);
+      const winner = validRewards[Math.floor(Math.random() * validRewards.length)];
+      const winnerIndex = winner.index;
+
+      const totalRounds = 3;
+      const totalSteps = totalRounds * cards.length + winnerIndex;
+
+      for (let i = 0; i <= totalSteps; i++) {
+        const cardIndex = i % cards.length;
+        cards.forEach(card => card.classList.remove('highlight'));
+        cards[cardIndex].classList.add('highlight');
+        cards[cardIndex].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+        await new Promise(r => setTimeout(r, 100 + i * 5));
+      }
+
+      const winCard = cards[winnerIndex];
+      winCard.classList.add('flipped');
+      flipSound.play();
+      winSound.play();
+
+      modalReward.innerHTML = `
+  🎉 អ្នកឈ្នះការបញ្ចុះតម្លៃ <span style="color:red;font-size: 1.4rem;">${winner.label}</span><br>
+  កូដ៖====<span style="color:red;font-size: 1.4rem;">${winner.code}</span>====<br>
+  --សូមយកកូដបញ្ចុះតម្លៃទៅបំពេញក្នុងប្រអប់ខាងមុខ!--
+`;
+winModal.style.display = "flex";
+
+    }
+  </script>
+</body>
+</html>

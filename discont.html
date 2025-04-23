@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discount Code</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Koulen&family=Hanuman&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Koulen', 'Hanuman', Arial, sans-serif;
+      background-color: #ffffff;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('6379114.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    .title {
+      color: #ffffff;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 30px 20px;
+    }
+
+    .button {
+      min-width: 300px;
+      min-height: 60px;
+      display: inline-flex;
+      font-family: 'Hanuman', 'Koulen', Arial, sans-serif;
+      font-size: 22px;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 1.3px;
+      font-weight: 700;
+      color: #313133;
+      background: linear-gradient(90deg, rgb(115, 255, 0) 0%, rgb(255, 251, 0) 100%);
+      border: none;
+      border-radius: 1000px;
+      box-shadow: 12px 12px 24px rgba(252, 247, 0, 0.64);
+      transition: all 0.3s ease-in-out 0s;
+      cursor: pointer;
+      outline: none;
+      position: relative;
+      padding: 10px 20px;
+    }
+
+    .button::before {
+      content: '';
+      border-radius: 1000px;
+      min-width: calc(300px + 12px);
+      min-height: calc(60px + 12px);
+      border: 6px solid #ffee00;
+      box-shadow: 0 0 60px rgb(255, 238, 0);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: all .3s ease-in-out 0s;
+    }
+
+    .button:hover,
+    .button:focus {
+      transform: translateY(-6px);
+    }
+
+    .button:hover::before,
+    .button:focus::before {
+      opacity: 1;
+    }
+
+    .button::after {
+      content: '';
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+      border: 6px solid #fbff00;
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: ring 1.5s infinite;
+    }
+
+    .button:hover::after,
+    .button:focus::after {
+      animation: none;
+      display: none;
+    }
+
+    @keyframes ring {
+      0% {
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+      }
+      100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+      }
+    }
+
+    .reload-btn,
+    .reload-btn1 {
+      position: fixed;
+      bottom: 20px;
+      padding: 15px 30px;
+      font-size: 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      animation: fadeIn 1s ease-in;
+      z-index: 10;
+      font-family: Hanuman;
+    }
+
+    .reload-btn {
+      right: 20px;
+      background-color: #008cff;
+      color: rgb(255, 255, 255);
+    }
+
+    .reload-btn1 {
+      left: 20px;
+      background-color: #ff0008;
+      color: rgb(255, 255, 255);
+    }
+
+    .reload-btn:hover,
+    .reload-btn1:hover {
+      background-color: #1976D2;
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 28px;
+        padding: 0 10px;
+      }
+
+      .button {
+        font-size: 18px;
+        min-width: 220px;
+        min-height: 50px;
+      }
+
+      .reload-btn,
+      .reload-btn1 {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 22px;
+      }
+
+      .button {
+        font-size: 16px;
+        min-width: 180px;
+        min-height: 45px;
+      }
+
+      .reload-btn,
+      .reload-btn1 {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+    #discountCode{
+      font-family: Hanuman;
+    }
+
+    /* ✅ Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      font-family: Hanuman;
+      text-align: center;
+      animation: slideDown 0.4s ease;
+    }
+
+    .modal-content input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      width: 80%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    .modal-content button,
+.modal-buttons button:nth-child(2) {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  font-family: 'Kh Koulen';
+  transition: transform 0.1s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* ប៊ូតុងលេខ 2 (ពណ៌ក្រហម) */
+.modal-buttons button:nth-child(2) {
+  background-color: #f44336;
+}
+
+/* Animation effect ពេលចុច */
+.modal-content button:active,
+.modal-buttons button:nth-child(2):active {
+  transform: scale(0.94); /* ធ្វើឲ្យបត់បន្តិច */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.modal-content button:hover,
+.modal-buttons button:nth-child(2):hover {
+  transform: scale(1.03);
+}
+
+    
+    #adminOption {
+      color: red;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes rotateGlow {
+  0% {
+    transform: rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 5px #00bfff);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.1);
+    filter: drop-shadow(0 0 15px #00bfff);
+  }
+  100% {
+    transform: rotate(-10deg) scale(1);
+    filter: drop-shadow(0 0 5px #00bfff);
+  }
+}
+
+.telegram-icon {
+  width: 60px;
+  margin-bottom: 15px;
+  animation: rotateGlow 2.5s infinite ease-in-out;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  cursor: pointer;
+}
+
+.telegram-icon:hover {
+  transform: scale(1.2) rotate(5deg) translateY(-5px);
+  filter: drop-shadow(0 0 20px #00cfff);
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  position: relative;
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  font-family: Hanuman;
+  max-width: 400px;
+  width: 85%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  animation: slideDown 0.3s ease;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 22px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #ff3333;
+  transform: scale(1.2);
+}
+/* ------------------------------------------------ */
+
+
+
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <div class="content">
+    <div class="title">សូមជ្រើសរើសបំពេញកូដបញ្ចុះតម្លៃ</div>
+    <button id="autoPayBtn" class="button">Promtion Code</button>
+  </div>
+
+  <!-- ✅ Modal -->
+  <div id="discountModal" class="modal">
+    <div class="modal-content">
+      <h2>តើអ្នកមានកូដបញ្ចុះតម្លៃដែរឬទេ?</h2>
+      <div class="modal-buttons">
+        <button onclick="showCodeInput()">មាន</button>
+        <button onclick="goToDefault()">គ្មាន</button>
+      </div>
+      <div id="codeInputArea" style="display: none; margin-top: 20px;">
+        <input type="text" id="discountCode" placeholder="បញ្ចូលលេខកូដ">
+        <button id="btn" class="submit" onclick="submitCode()">OK</button>
+      </div>
+      <p id="adminOption" style="display: none; margin-top: 15px;">
+        ⚠️ កូដមិនស្គាល់ទេ។ <br>
+        <a href="https://t.me/vathana_trader">ទាក់ទង Admin</a> ឬ <a href="discont.html">សាកសល្បងម្តងទៀត</a>
+      </p>
+    </div>
+  </div>
+
+  <button id="btn-home" class="reload-btn" onclick="reloadHomePage()">🔄 ត្រឡប់ទៅទំព័រដើម</button>
+  <button id="btn-back" class="reload-btn1" onclick="reloadPrePage()">◀️ ត្រឡប់ថយក្រោយ</button>
+  <div id="noCodeModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">❌</span>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
+           alt="Telegram"
+           class="telegram-icon"
+           onclick="window.open('https://t.me/vathana_trader', '_blank')">
+      <h3>មិនទាន់មានកូដបញ្ចុះតម្លៃ?</h3>
+      <p>សូមទាក់ទងមក Admin ដើម្បីទទួលបានកូដ។</p>
+      <p>អ្នកអាច:</p>
+      <ul style="text-align: left; margin-left: 20px;">
+        <li>📱 ទាក់ទងតេលេក្រាមសម្រាប់ជំនួយ</li>
+        <li>🚀 អ្នកទេចុចប៊ូតុង បដិសេដ ដើម្បីបន្តទៅមុខ</li>
+      </ul>
+      <div class="modal-buttons">
+        <button onclick="window.open('https://t.me/vathana_trader', '_blank')">
+          📨 ទាក់ទងតេលេក្រាម
+        </button>
+        <button class="necative" onclick="goToFinalPage()">បដិសេដ</button>
+      </div>
+    </div>
+    
+    
+  </div>
+  
+  
+</body>
+</html>
+<script>
+    document.getElementById("autoPayBtn").addEventListener("click", function () {
+      document.getElementById("discountModal").style.display = "block";
+    });
+
+    function showCodeInput() {
+      document.getElementById("codeInputArea").style.display = "block";
+    }
+
+    function goToDefault() {
+      window.location.href = "QR15.html";
+    }
+
+    function submitCode() {
+      const code = document.getElementById("discountCode").value.trim();
+      const adminMsg = document.getElementById("adminOption");
+
+      if (code === "168") {
+        window.location.href = "QR10.html";
+      } else if (code === "143") {
+        window.location.href = "QR15.html";
+      } else {
+        adminMsg.style.display = "block";
+      }
+    }
+    document.getElementById("discountCode").addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    submitCode();
+  }
+});
+    function goToDefault() {
+    document.getElementById('noCodeModal').style.display = 'flex';
+    }
+    function closeModal() {
+    document.getElementById('noCodeModal').style.display = 'none';
+  }
+
+
+    function goToFinalPage() {
+    window.location.href = "QR20.html";
+    }
+
+
+    function reloadHomePage() {
+      window.location.href = "index.html";
+    }
+
+    function reloadPrePage() {
+      window.location.href = "choose.html";
+    }
+  </script>

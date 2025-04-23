@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Pay</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Koulen&family=Hanuman&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Koulen', 'Hanuman', Arial, sans-serif;
+      background-color: #ffffff;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('6379114.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    .title {
+      color: #ffffff;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 30px 20px;
+    }
+
+    /* ✅ Custom Animated Button Style */
+    .button {
+      min-width: 300px;
+      min-height: 60px;
+      display: inline-flex;
+      font-family: 'Hanuman', 'Koulen', Arial, sans-serif;
+      font-size: 22px;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      text-align: center;
+      letter-spacing: 1.3px;
+      font-weight: 700;
+      color: #313133;
+      background: linear-gradient(90deg, rgb(115, 255, 0) 0%, rgb(255, 251, 0) 100%);
+      border: none;
+      border-radius: 1000px;
+      box-shadow: 12px 12px 24px rgba(252, 247, 0, 0.64);
+      transition: all 0.3s ease-in-out 0s;
+      cursor: pointer;
+      outline: none;
+      position: relative;
+      padding: 10px 20px;
+    }
+
+    .button::before {
+      content: '';
+      border-radius: 1000px;
+      min-width: calc(300px + 12px);
+      min-height: calc(60px + 12px);
+      border: 6px solid #ffee00;
+      box-shadow: 0 0 60px rgb(255, 238, 0);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: all .3s ease-in-out 0s;
+    }
+
+    .button:hover,
+    .button:focus {
+      transform: translateY(-6px);
+    }
+
+    .button:hover::before,
+    .button:focus::before {
+      opacity: 1;
+    }
+
+    .button::after {
+      content: '';
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+      border: 6px solid #fbff00;
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: ring 1.5s infinite;
+    }
+
+    .button:hover::after,
+    .button:focus::after {
+      animation: none;
+      display: none;
+    }
+
+    @keyframes ring {
+      0% {
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+      }
+      100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+      }
+    }
+
+    /* 🔁 Back & Home buttons */
+    .reload-btn,
+    .reload-btn1 {
+      position: fixed;
+      bottom: 20px;
+      padding: 15px 30px;
+      font-size: 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      animation: fadeIn 1s ease-in;
+      z-index: 10;
+      font-family: Hanuman;
+    }
+
+    .reload-btn {
+      right: 20px;
+      background-color: #008cff;
+      color: rgb(255, 255, 255);
+    }
+
+    .reload-btn1 {
+      left: 20px;
+      background-color: #ff0008;
+      color: rgb(255, 255, 255);
+    }
+
+    .reload-btn:hover,
+    .reload-btn1:hover {
+      background-color: #1976D2;
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ✅ Responsive styles */
+    @media (max-width: 768px) {
+      .title {
+        font-size: 28px;
+        padding: 0 10px;
+      }
+
+      .button {
+        font-size: 18px;
+        min-width: 220px;
+        min-height: 50px;
+      }
+
+      .reload-btn,
+      .reload-btn1 {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 22px;
+      }
+
+      .button {
+        font-size: 16px;
+        min-width: 180px;
+        min-height: 45px;
+      }
+
+      .reload-btn,
+      .reload-btn1 {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <div class="content">
+    <div class="title">ចុចប៊ូតុងខាងក្រោមនេះ ដើម្បីបង់ប្រាក់ដោយប្រើប្រាស់ KHQR</div>
+    <button id="autoPayBtn" class="button">AUTO PAY – KHQR</button>
+  </div>
+
+  <button id="btn-home" class="reload-btn" onclick="reloadHomePage()">🔄 ត្រឡប់ទៅទំព័រដើម</button>
+  <button id="btn-back" class="reload-btn1" onclick="reloadPrePage()">◀️ ត្រឡប់ថយក្រោយ</button>
+
+  <script>
+    document.getElementById("autoPayBtn").addEventListener("click", function () {
+      window.location.href = "random.html";
+    });
+
+    function reloadHomePage() {
+      window.location.href = "index.html";
+    }
+
+    function reloadPrePage() {
+      window.location.href = "index.html";
+    }
+
+  </script>
+</body>
+</html>

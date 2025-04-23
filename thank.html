@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ការត្រួតពិនិត្យបង់ប្រាក់</title>
+  <style>
+    body {
+      font-family: 'Khmer OS Battambang', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('6379114.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    .center-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .continuous-4 {
+      width: 120px;
+      height: 22px;
+      border-radius: 40px;
+      color: #ff0000;
+      border: 2px solid;
+      position: relative;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .continuous-4::before {
+      content: "";
+      position: absolute;
+      margin: 2px;
+      width: 14px;
+      top: 0;
+      bottom: 0;
+      left: -20px;
+      border-radius: inherit;
+      background: currentColor;
+      box-shadow: -10px 0 12px 3px;
+      clip-path: polygon(0 5%, 100% 0,100% 100%,0 95%,-30px 50%);
+      animation: ct4 1s infinite linear;
+    }
+
+    @keyframes ct4 {
+      100% { left: calc(100% + 20px); }
+    }
+
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      padding: 0 10px;
+      font-family:Kh Koulen;
+    }
+    .done-button {
+      background-color: #00b92e;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, background-color 0.3s;
+      animation: pulse 1.5s infinite;
+      display: none;
+      font-family:Kh Koulen;
+    }
+
+    .done-button:hover {
+      transform: scale(1.05);
+      background-color: darkgreen;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 480px) {
+      #message {
+        font-size: 16px;
+      }
+
+      .done-button {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      .continuous-4 {
+        width: 100px;
+        height: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="center-wrapper">
+    <div class="continuous-4" id="loadingBar"></div>
+    <div id="message">
+      ការបង់ប្រាក់កំពុងពិនិត្យ សូមមេត្តារងចាំ... <span id="countdown">30</span> វិនាទី
+    </div>
+    <button class="done-button" id="doneBtn" onclick="onDoneClicked()">រួចរាល់</button>
+  </div>
+
+  <script>
+    // Time Check
+    let countdown = 15;
+    const countdownElement = document.getElementById("countdown");
+    const loadingBar = document.getElementById("loadingBar");
+    const message = document.getElementById("message");
+    const doneBtn = document.getElementById("doneBtn");
+
+    const interval = setInterval(() => {
+      countdown--;
+      countdownElement.textContent = countdown;
+      if (countdown <= 0) {
+        clearInterval(interval);
+        loadingBar.style.display = "none";
+        message.textContent = "✅ ការបង់ប្រាក់ទទួលបានជោគជ័យ";
+        doneBtn.style.display = "inline-block";
+      }
+    }, 1000);
+
+    function onDoneClicked() {
+      alert("🎉 អរគុណ! អ្នកបានបញ្ចប់ជោគជ័យ។");
+      window.location.href = "Final.html";
+    }
+  </script>
+</body>
+</html>
